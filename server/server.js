@@ -12,6 +12,7 @@ const _ = require('lodash');
 const { mongoose } = require('./db/mongooseconfig.js');
 const { Todo } = require('./models/todomodel.js');
 const { User } = require('./models/usermodel.js');
+const { authenticate } = require('./middleware/authenticate.js');
 
 var app = express();
 
@@ -133,6 +134,10 @@ app.post('/users', (request, response) => {
     .catch((error) => {
         response.status(400).send(error);
     })
+});
+
+app.get('/users/me', authenticate, (request, response) => {
+    response.send(request.user);
 });
 
 app.listen(port, () => {
